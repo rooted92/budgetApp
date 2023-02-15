@@ -4,7 +4,6 @@
 import { MakeBudgetForm, injectBudgetForm, MakeBudgetButtons } from "./injections.js";
 import { GetBudgets, RemoveFromLocalStorage, SaveBudgetToLocalStorage } from "./localStorage.js";
 // global variables
-let id = 0;
 let budget = {
     budName: '',
     budgetAmount: 0,
@@ -22,28 +21,26 @@ let refreshBtn = document.getElementById('refreshBtn');
 let monthlyBudget, budgetName, expenseName, expenseAmount, addExpenseBtn, budAmt, expAmt, balAmt, saveBudgetBtn;
 
 const addExpenseToBudgetObjectArray = (name, amount) => {
-    if (name === '' || amount === '') {
-        alert('Please make an entry');
+    const expenseObj = {
+        expName: name,
+        expAmount: parseInt(amount)
     }
-    else {
-        const expenseObj = {
-            expName: name,
-            expAmount: parseInt(amount)
-        }
-        budget.expenses.push(expenseObj);
-        // displayExpenses(budget.expAmount, budget.expenses);
-        expenseName.value = '';
-        expenseAmount.value = '';
-    }
+    budget.expenses.push(expenseObj);
+    expenseName.value = '';
+    expenseAmount.value = '';
 }
 // try passing in expAmount from expenseObj as bAmount, use expenses from budget with reduce method for total expense, balance will be bAmount - bExpenses
 const DisplayExpensesTotal = (arr, budgetAmount) => {
     let expenses = arr.reduce((acc, cur) => acc + cur.expAmount, 0);
-    budAmt.textContent = `${parseInt(budgetAmount)}`;
-    expAmt.textContent = `${expenses}`;
-    balAmt.textContent = `${parseInt(budgetAmount) - expenses}`;
+    let getBalance = parseInt(budgetAmount) - expenses;
+    let formatBudgetAmount = parseInt(budgetAmount);
+    let convertBalance = getBalance.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    let convertExpenses = expenses.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    let convertBudgetAmount = formatBudgetAmount.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    budAmt.textContent = `${convertBudgetAmount}`;
+    expAmt.textContent = `${convertExpenses}`;
+    balAmt.textContent = `${convertBalance}`;
 }
-
 
 createBudgetBtn.addEventListener('click', function () {
     console.log('Budget Started');
@@ -59,33 +56,50 @@ createBudgetBtn.addEventListener('click', function () {
     expAmt = document.querySelector('#expAmt');
     budAmt = document.querySelector('#budAmt');
     addExpenseBtn.addEventListener('click', function () {
-        budAmt.textContent = `${monthlyBudget.value}`;
-        budget.budgetAmount = parseInt(monthlyBudget.value);
-        budget.budName = budgetName.value;
-        addExpenseToBudgetObjectArray(expenseName.value, expenseAmount.value);
-        DisplayExpensesTotal(budget.expenses, monthlyBudget.value);
+        if (expenseName.value === '' || expenseAmount.value === '') {
+            alert('Please enter expense name and amount');
+        }
+        else {
+            budget.budgetAmount = parseInt(monthlyBudget.value);
+            budget.budName = budgetName.value;
+            addExpenseToBudgetObjectArray(expenseName.value, expenseAmount.value);
+            DisplayExpensesTotal(budget.expenses, monthlyBudget.value);
+        }
+
     });
     saveBudgetBtn.addEventListener('click', function () {
-        budgetName.value = '';
-        monthlyBudget.value = '';
-        budAmt.textContent = '0';
-        balAmt.textContent = '0';
-        expAmt.textContent = '0';
-        SaveBudgetToLocalStorage(budget);
-        PopulateList();
+        if (budgetName.value === '' || monthlyBudget.value === '') {
+            alert('Please fill out required fields');
+            setTimeout(() => {
+                budgetName.classList.add('border-danger');
+                budgetName.placeholder = 'input required';
+                monthlyBudget.classList.add('border-danger');
+                monthlyBudget.placeholder = 'input required';
+            });
+        }
+        else {
+            budgetName.value = '';
+            monthlyBudget.value = '';
+            budAmt.textContent = '0';
+            balAmt.textContent = '0';
+            expAmt.textContent = '0';
+            SaveBudgetToLocalStorage(budget);
+            PopulateList();
+        }
     });
 });
 
-refreshBtn.addEventListener('click', function(){
+refreshBtn.addEventListener('click', function () {
     PopulateList();
+    console.log('Refreshed!');
 });
 
 const PopulateList = () => {
     injectCurrentBudget.textContent = '';
     let budgetList = GetBudgets();
-    budgetList.length > 0 ? currentBudgetText.style.display = 'none' : currentBudgetText.style.display = 'block' ;
+    budgetList.length > 0 ? currentBudgetText.style.display = 'none' : currentBudgetText.style.display = 'block';
     budgetList.map(item => MakeBudgetButtons(item.budName));
 }
 PopulateList();
 
-export {injectCurrentBudget, budget};
+export { injectCurrentBudget, budget };

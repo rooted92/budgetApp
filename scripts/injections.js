@@ -104,7 +104,7 @@ const MakeBudgetForm = () => {
     let monBudLabel = document.createElement('label');
     monBudLabel.classList.add('fw-bold');
     monBudLabel.for = 'monthlyBudget';
-    monBudLabel.textContent = 'Budget/Income:';
+    monBudLabel.textContent = 'Monthly Income:';
     let budNameInput = document.createElement('input');
     budNameInput.classList.add('border-primary');
     budNameInput.placeholder = 'Enter budget name';
@@ -113,7 +113,7 @@ const MakeBudgetForm = () => {
     let budNameLabel = document.createElement('label');
     budNameLabel.classList.add('fw-bold');
     budNameLabel.for = 'budgetName';
-    budNameLabel.textContent = 'Budget Name:';
+    budNameLabel.textContent = 'Budget Goal:';
     let monBudCol = document.createElement('div');
     monBudCol.className = 'col-12 d-flex flex-column justify-content-between';
     monBudCol.append(budNameLabel, budNameInput, monBudLabel, monBudInput);
