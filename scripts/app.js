@@ -18,13 +18,8 @@ let createBudgetDiv = document.querySelector('#createBudgetDiv');
 let createBudgetBtn = document.querySelector('#createBudgetBtn');
 let currentBudgetText = document.querySelector('#currentBudgetText');
 let injectCurrentBudget = document.querySelector('#injectCurrentBudget');
-let mainCont = document.querySelector('#mainCont');
-let monthlyBudget, budgetName, expenseName, expenseAmount, deleteBtn;
-let addExpenseBtn;
-let budAmt;
-let expAmt;
-let balAmt;
-let saveBudgetBtn;
+let refreshBtn = document.getElementById('refreshBtn');
+let monthlyBudget, budgetName, expenseName, expenseAmount, addExpenseBtn, budAmt, expAmt, balAmt, saveBudgetBtn;
 
 const addExpenseToBudgetObjectArray = (name, amount) => {
     if (name === '' || amount === '') {
@@ -81,11 +76,14 @@ createBudgetBtn.addEventListener('click', function () {
     });
 });
 
+refreshBtn.addEventListener('click', function(){
+    PopulateList();
+});
 
 const PopulateList = () => {
+    injectCurrentBudget.textContent = '';
     let budgetList = GetBudgets();
     budgetList.length > 0 ? currentBudgetText.style.display = 'none' : currentBudgetText.style.display = 'block' ;
-    deleteBtn = document.querySelector('#deleteBtn');
     budgetList.map(item => MakeBudgetButtons(item.budName));
 }
 PopulateList();

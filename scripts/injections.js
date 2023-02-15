@@ -144,7 +144,7 @@ const MakeBudgetButtons = (budName) => {
     col.append(p, delBtn);
 
     let row = document.createElement('div');
-    row.classList.add('row');
+    row.classList.add('row', 'mt-2');
     row.append(col);
     injectCurrentBudget.append(row);
 
