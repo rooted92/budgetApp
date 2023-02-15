@@ -19,7 +19,7 @@ let currentBudgetText = document.querySelector('#currentBudgetText');
 let injectCurrentBudget = document.querySelector('#injectCurrentBudget');
 let refreshBtn = document.getElementById('refreshBtn');
 let monthlyBudget, budgetName, expenseName, expenseAmount, addExpenseBtn, budAmt, expAmt, balAmt, saveBudgetBtn;
-
+let expenses, getBalance, formatBudgetAmount, convertBalance, convertExpenses, convertBudgetAmount;
 const addExpenseToBudgetObjectArray = (name, amount) => {
     const expenseObj = {
         expName: name,
@@ -31,12 +31,12 @@ const addExpenseToBudgetObjectArray = (name, amount) => {
 }
 // try passing in expAmount from expenseObj as bAmount, use expenses from budget with reduce method for total expense, balance will be bAmount - bExpenses
 const DisplayExpensesTotal = (arr, budgetAmount) => {
-    let expenses = arr.reduce((acc, cur) => acc + cur.expAmount, 0);
-    let getBalance = parseInt(budgetAmount) - expenses;
-    let formatBudgetAmount = parseInt(budgetAmount);
-    let convertBalance = getBalance.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
-    let convertExpenses = expenses.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
-    let convertBudgetAmount = formatBudgetAmount.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    expenses = arr.reduce((acc, cur) => acc + cur.expAmount, 0);
+    getBalance = parseInt(budgetAmount) - expenses;
+    formatBudgetAmount = parseInt(budgetAmount);
+    convertBalance = getBalance.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    convertExpenses = expenses.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+    convertBudgetAmount = formatBudgetAmount.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
     budAmt.textContent = `${convertBudgetAmount}`;
     expAmt.textContent = `${convertExpenses}`;
     balAmt.textContent = `${convertBalance}`;
@@ -78,6 +78,8 @@ createBudgetBtn.addEventListener('click', function () {
             });
         }
         else {
+            budget.budgetBalance = getBalance;
+            budget.budgetExpenses = expenses;
             budgetName.value = '';
             monthlyBudget.value = '';
             budAmt.textContent = '0';
