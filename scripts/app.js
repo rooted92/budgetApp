@@ -51,7 +51,7 @@ const DisplayExpensesTotal = (arr, budgetAmount) => {
 
 
 createBudgetBtn.addEventListener('click', function () {
-    console.log('Budget Created');
+    console.log('Budget Started');
     createBudgetDiv.style.display = 'none';
     MakeBudgetForm();
     budgetName = document.querySelector('#budgetName');
