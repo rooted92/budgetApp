@@ -1,10 +1,12 @@
 //inject budget form
+import {injectCurrentBudget, budget} from './app.js';
+import { RemoveFromLocalStorage } from './localStorage.js';
 let injectBudgetForm = document.querySelector('#injectBudgetForm');
 
 const MakeBudgetForm = () => {
     // save budget button
     let saveBudBtn = document.createElement('button');
-    saveBudBtn.className = 'btn btn-dark';
+    saveBudBtn.className = 'btn btn-success';
     saveBudBtn.type = 'button';
     saveBudBtn.id = 'saveBudgetBtn';
     saveBudBtn.textContent = 'Save Budget';
@@ -19,7 +21,7 @@ const MakeBudgetForm = () => {
     balAmt.id = 'balAmt';
     balAmt.textContent = 0;
     let pBal = document.createElement('p');
-    pBal.classList.add('text-info');
+    pBal.classList.add('text-info', 'fw-bold');
     pBal.textContent = 'Balance';
     let divBal = document.createElement('div');
     divBal.classList.add('col-4', 'text-center');
@@ -29,7 +31,7 @@ const MakeBudgetForm = () => {
     expAmt.id = 'expAmt';
     expAmt.textContent = 0;
     let pExp = document.createElement('p');
-    pExp.classList.add('text-danger');
+    pExp.classList.add('text-danger', 'fw-bold');
     pExp.textContent = 'Expenses';
     let divExp = document.createElement('div');
     divExp.classList.add('col-4', 'text-center');
@@ -39,7 +41,7 @@ const MakeBudgetForm = () => {
     budAmt.id = 'budAmt';
     budAmt.textContent = 0;
     let pBud = document.createElement('p');
-    pBud.classList.add('text-success');
+    pBud.classList.add('text-success', 'fw-bold');
     pBud.textContent = 'Budget';
     let divBud = document.createElement('div');
     divBud.classList.add('col-4', 'text-center');
@@ -127,21 +129,6 @@ const MakeBudgetForm = () => {
     injectBudgetForm.append(firstQuestion, firstRow, secondQuestion, secondRow, thirdRow, fourthRow);
 }
 
-const MakeCreateButton = () => {
-    let createBtn = document.querySelector('button');
-    createBtn.type = 'button';
-    createBtn.className = 'btn btn-success';
-    createBtn.id = 'createBudgetBtn';
-    createBtn.textContent = 'Create a Budget';
-    let col12 = document.createElement('div');
-    col12.className = 'col-12 d-flex justify-content-center';
-    col12.append(createBtn);
-    let row = document.createElement('div');
-    row.classList.add('row');
-    row.append(col12);
-    createBudgetDiv.append(row);
-}
-
 const MakeBudgetButtons = (budName) => {
     let delBtn = document.createElement('button');
     delBtn.type = 'button';
@@ -158,8 +145,13 @@ const MakeBudgetButtons = (budName) => {
 
     let row = document.createElement('div');
     row.classList.add('row');
-    
-    return row.append(col);
+    row.append(col);
+    injectCurrentBudget.append(row);
+
+    delBtn.addEventListener('click', function(){
+        RemoveFromLocalStorage(budget.budName);
+        injectCurrentBudget.removeChild(row);
+    })
 }
 
-export { injectBudgetForm, MakeBudgetForm, MakeCreateButton, MakeBudgetButtons };
+export { injectBudgetForm, MakeBudgetForm, MakeBudgetButtons };

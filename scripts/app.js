@@ -1,8 +1,8 @@
 // try invoking functions when page first loads 
 
 // imports
-import { MakeBudgetForm, injectBudgetForm, MakeCreateButton } from "./injections.js";
-import { GetBudgets, SaveBudgetToLocalStorage } from "./localStorage.js";
+import { MakeBudgetForm, injectBudgetForm, MakeBudgetButtons } from "./injections.js";
+import { GetBudgets, RemoveFromLocalStorage, SaveBudgetToLocalStorage } from "./localStorage.js";
 // global variables
 let id = 0;
 let budget = {
@@ -19,7 +19,7 @@ let createBudgetBtn = document.querySelector('#createBudgetBtn');
 let currentBudgetText = document.querySelector('#currentBudgetText');
 let injectCurrentBudget = document.querySelector('#injectCurrentBudget');
 let mainCont = document.querySelector('#mainCont');
-let monthlyBudget, budgetName, expenseName, expenseAmount;
+let monthlyBudget, budgetName, expenseName, expenseAmount, deleteBtn;
 let addExpenseBtn;
 let budAmt;
 let expAmt;
@@ -73,14 +73,21 @@ createBudgetBtn.addEventListener('click', function () {
     saveBudgetBtn.addEventListener('click', function () {
         budgetName.value = '';
         monthlyBudget.value = '';
+        budAmt.textContent = '0';
+        balAmt.textContent = '0';
+        expAmt.textContent = '0';
         SaveBudgetToLocalStorage(budget);
-        createBudgetDiv.style.display = 'block';
-        injectBudgetForm.style.display = 'none';
+        PopulateList();
     });
 });
 
 
 const PopulateList = () => {
     let budgetList = GetBudgets();
-    budgetList.map()
+    budgetList.length > 0 ? currentBudgetText.style.display = 'none' : currentBudgetText.style.display = 'block' ;
+    deleteBtn = document.querySelector('#deleteBtn');
+    budgetList.map(item => MakeBudgetButtons(item.budName));
 }
+PopulateList();
+
+export {injectCurrentBudget, budget};

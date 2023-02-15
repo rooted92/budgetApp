@@ -13,7 +13,6 @@ function SaveBudgetToLocalStorage(budget) {
 //create function get local storage
 function GetBudgets() {
     let localStorageData = localStorage.getItem('Budgets');
-    console.log(localStorageData);
     if (localStorageData === null) {
         return [];
     }
